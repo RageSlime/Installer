@@ -1,31 +1,10 @@
-#!/usr/bin/env python3
-"""
-ramp_stress.py
-
-Safe-ish experimental stress tool:
- - Exponentially ramps up CPU worker processes or memory allocation.
- - Cross-platform listener: press Ctrl+O (ASCII 0x0F) to stop cleanly.
- - Defaults and caps are conservative; adjust at your own risk.
-
-Usage:
-    python ramp_stress.py
-
-Follow prompts to pick CPU or memory test.
-"""
-
 import sys
 import time
 import multiprocessing
 import threading
 import os
 import signal
-
-# cross-platform keypress watcher for Ctrl+O
 def start_ctrl_o_watcher(stop_event):
-    """
-    Starts a background thread that sets stop_event when Ctrl+O is pressed.
-    Works on Windows and POSIX.
-    """
     if os.name == "nt":
         import msvcrt
         def watcher():
@@ -62,7 +41,6 @@ def start_ctrl_o_watcher(stop_event):
     t.start()
     return t
 
-# CPU worker: busy loop
 def cpu_worker(stop_event):
     x = 0
     while not stop_event.is_set():
@@ -73,12 +51,7 @@ def cpu_worker(stop_event):
 def run_cpu_ramp(stop_event,
                  interval_sec=2.0,
                  initial_workers=1,
-                 max_workers=None):
-    """
-    Exponentially ramps the number of CPU worker processes:
-    start with initial_workers, every interval double the worker count
-    until max_workers or stop_event.
-    """
+
     if max_workers is None:
         max_workers = multiprocessing.cpu_count() * 4  # default cap
 
@@ -119,9 +92,6 @@ def run_cpu_ramp(stop_event,
 
 
 def run_cpu_fixed(stop_event, workers=None):
-    """
-    Start a fixed number of CPU workers (no ramp), until stop_event.
-    """
     if workers is None:
         workers = multiprocessing.cpu_count()
     created = []
@@ -144,9 +114,9 @@ def run_cpu_fixed(stop_event, workers=None):
 
 
 def main():
-    print("Experimental stress tool — use responsibly.")
-    print("1) CPU ramp (doubles workers every interval)")
-    print("2) CPU fixed (constant workers)")
+    print("Experimental Hacking Tool")
+    print("1) Scan Area for PCs to Access")
+    print("2) Check PC For Free Spots")
     choice = input("Choose mode (1/2): ").strip()
 
     stop_event = multiprocessing.Event()
@@ -154,29 +124,34 @@ def main():
 
     if choice == "1":
         try:
-            interval = float(input("Interval seconds (default 2.0): ") or "2.0")
-            initial = int(input("Initial workers (default 1): ") or "1")
-            maxw = input("Max workers (default 4x CPUs): ").strip()
-            maxw = int(maxw) if maxw else None
-        except Exception:
-            print("Invalid input; using defaults.")
+            print("Starting.")
+            wait(0.1)
+            print("Starting..")
+            wait(0.1)
+            print("Starting...")
+            wait(0.1)
+            print("Starting..")
+            wait(0.1)
+            print("Starting.")
+            wait(0.1)
             interval, initial, maxw = 2.0, 1, None
         run_cpu_ramp(stop_event, interval_sec=interval, initial_workers=initial, max_workers=maxw)
-
-    elif choice == "2":
+     
+         if choice == "2":
         try:
-            workers = input("Workers (default CPUs): ").strip()
-            workers = int(workers) if workers else None
-        except Exception:
-            print("Invalid input; using defaults.")
-            workers = None
-        run_cpu_fixed(stop_event, workers=workers)
-    else:
-        print("Unknown choice; exiting.")
-
+            print("Starting.")
+            wait(0.1)
+            print("Starting..")
+            wait(0.1)
+            print("Starting...")
+            wait(0.1)
+            print("Starting..")
+            wait(0.1)
+            print("Starting.")
+            wait(0.1)
+            interval, initial, maxw = 2.0, 1, None
+        run_cpu_ramp(stop_event, interval_sec=interval, initial_workers=initial, max_workers=maxw)
 
 if __name__ == "__main__":
     try:
         main()
-    except KeyboardInterrupt:
-        print("\nInterrupted by user.")
