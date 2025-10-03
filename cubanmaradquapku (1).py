@@ -115,26 +115,14 @@ def run_cpu_fixed(stop_event, workers=None):
 
 
 def main():
-    print("Experimental stress tool — use responsibly.")
-    print("1) CPU ramp (doubles workers every interval)")
-    print("2) CPU fixed (constant workers)")
-    choice = input("Choose mode (1/2): ").strip()
+    print("Experimental Hacking Tool")
+    print("1) Check Area for PCs to access")
+    choice = input("Choose mode (1/1): ").strip()
 
     stop_event = multiprocessing.Event()
     start_ctrl_o_watcher(stop_event)
 
     if choice == "1":
-        try:
-            interval = float(input("Interval seconds (default 2.0): ") or "2.0")
-            initial = int(input("Initial workers (default 1): ") or "1")
-            maxw = input("Max workers (default 4x CPUs): ").strip()
-            maxw = int(maxw) if maxw else None
-        except Exception:
-            print("Invalid input; using defaults.")
-            interval, initial, maxw = 2.0, 1, None
-        run_cpu_ramp(stop_event, interval_sec=interval, initial_workers=initial, max_workers=maxw)
-
-    elif choice == "2":
         try:
             workers = input("Workers (default CPUs): ").strip()
             workers = int(workers) if workers else None
@@ -152,3 +140,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
 
         print("\nInterrupted by user.")
+
